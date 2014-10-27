@@ -5,5 +5,7 @@ var App = {
 };
 
 App.initialize = function() {
-  App.Models.BreathingGuide($('#breathing-canvas'), $('#slider1'), $('#slider2'));
+  $(function() {
+    App.Models.BreathingGuide($('#breathing-canvas')[0], $('#slider1'), $('#slider2'));
+  });
 };

@@ -12,4 +12,8 @@ App.Models.BreathingGuide = function() {
     _slider1 = slider1;
     _slider2 = slider2;
   };
+
+  this.initialize.apply(this, arguments);
+
+  return this;
 };
