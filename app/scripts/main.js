@@ -1,1 +1,2 @@
-console.log(":)");
+/* global App */
+App.initialize();
