@@ -15,9 +15,18 @@ App.Models.BreathingCanvas = function() {
   // Constructor
   this.initialize = function(canvas) {
     _canvas = canvas;
-    _function = new App.Models.ComposedSine(1, 4);
+    _function = new App.Models.ComposedSine(3, 3);
 
     initCanvas();
+  };
+
+  // Public functions
+  this.setUpSpeed = function(speed) {
+    _function.setUpSpeed(speed);
+  };
+
+  this.setDownSpeed = function(speed) {
+    _function.setDownSpeed(speed);
   };
 
   // Private functions
@@ -36,10 +45,10 @@ App.Models.BreathingCanvas = function() {
     _width = _canvas.width;
 
     _xAxis = Math.floor(_height/2);
-    _yAxis = 0;
+    _yAxis = Math.floor(_width/2);
 
-    _time.t = 0;
-    _time.seconds = 0;
+    _time.t = 0;//0.5*Math.PI;
+    _time.seconds = 0;//0.5;
 
     _context.save();
 
@@ -54,6 +63,9 @@ App.Models.BreathingCanvas = function() {
     // Draws the function and the circle in the canvas
     _context.beginPath();
     drawFunction();
+    _context.stroke();
+
+    _context.beginPath();
     drawCircle();
     _context.stroke();
 
@@ -73,13 +85,16 @@ App.Models.BreathingCanvas = function() {
     // The plotting occurs every four pixels, which offers more or less the
     // same quality as using one. More than four pixels shows shuttering
     // corners
-    for (var i = _yAxis; i <= _width; i += 4) {
-      _context.lineTo(i, -UNITS*_function.evaluate(i/UNITS, _time.t) + _xAxis);
+    for (var i = 0; i <= _width; i += 4) {
+      _context.lineTo(i, -UNITS*_function.evaluate((i - _yAxis)/UNITS, _time.t) + _xAxis);
     }
   };
 
   var drawCircle = function() {
+    var xCenter = _width/2,
+        yCenter = -UNITS*_function.evaluate(0, _time.t) + _xAxis;
 
+    _context.arc(xCenter, yCenter, 10, 0, 2*Math.PI, false);
   };
 
   this.initialize.apply(this, arguments);
