@@ -17,16 +17,27 @@ App.Models.BreathingGuide = function() {
 
   // Private functions
   var initSliders = function() {
-    _slider1.on('input', onSlider1Input);
-    _slider2.on('input', onSlider2Input);
+    window._slider1 = _slider1;
+    $('input', _slider1).on('input', onSlider1Input);
+    $('input', _slider2).on('input', onSlider2Input);
   };
 
   var onSlider1Input = function () {
-    _canvas.setUpSpeed($(this).val());
+    var value = $(this).val();
+
+    _canvas.setUpSpeed(value);
+    updateLabel(_slider1, value);
   };
 
   var onSlider2Input = function () {
-    _canvas.setDownSpeed($(this).val());
+    var value = $(this).val();
+
+    _canvas.setDownSpeed(value);
+    updateLabel(_slider2, value);
+  };
+
+  var updateLabel = function(slider, value) {
+    $('label', slider).html(parseFloat(value).toFixed(1) + 's');
   };
 
   this.initialize.apply(this, arguments);

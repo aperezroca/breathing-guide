@@ -4,20 +4,33 @@
 App.Models.BreathingCanvas = function() {
 
   // Constants
-  var UNITS = 100,
-      STROKE_COLOR = '#000',
-      STROKE_WIDTH = 2;
+  var STROKE_COLOR = '#999',
+      STROKE_COLOR_CIRCLE = '#000',
+      CIRCLE_RADIUS = 12,
+      STROKE_WIDTH = 3;
 
   // Private vars
   var _canvas, _context, _height, _width,
-      _xAxis, _yAxis, _time = {}, _function;
+      _xAxis, _yAxis, _time = {}, _function, _scale = 100;
 
   // Constructor
   this.initialize = function(canvas) {
     _canvas = canvas;
     _function = new App.Models.ComposedSine(3, 3);
 
+    // Configures general properties of the canvas and initialize
+    // the object itself
+    _context = _canvas.getContext('2d');
+
+    _time.t = 0;
+    _time.seconds = 0;
+
+    $(window).resize(initCanvas);
+
     initCanvas();
+
+    // Initializes the drawing of the canvas
+    draw();
   };
 
   // Public functions
@@ -31,15 +44,8 @@ App.Models.BreathingCanvas = function() {
 
   // Private functions
   var initCanvas = function() {
-    // Configures general properties of the canvas and initialize
-    // the object itself
-    _canvas.width = 800;
-    _canvas.height = 300;
-
-    _context = _canvas.getContext('2d');
-    _context.strokeStyle = STROKE_COLOR;
-    _context.lineJoin = 'round';
-    _context.lineWidth = STROKE_WIDTH;
+    _canvas.width = $(_canvas).width();
+    _canvas.height = $(_canvas).height();
 
     _height = _canvas.height;
     _width = _canvas.width;
@@ -47,13 +53,15 @@ App.Models.BreathingCanvas = function() {
     _xAxis = Math.floor(_height/2);
     _yAxis = Math.floor(_width/2);
 
-    _time.t = 0;//0.5*Math.PI;
-    _time.seconds = 0;//0.5;
+    _context = _canvas.getContext('2d');
+    _context.lineJoin = 'round';
+    _context.lineWidth = STROKE_WIDTH;
 
-    _context.save();
+    _context.lineJoin = 'round';
+    _context.lineWidth = STROKE_WIDTH;
 
-    // Initializes the drawing of the canvas
-    draw();
+    if (_width < 300) { _scale = 50; }
+    else { _scale = 100; }
   };
 
   var draw = function() {
@@ -62,16 +70,18 @@ App.Models.BreathingCanvas = function() {
 
     // Draws the function and the circle in the canvas
     _context.beginPath();
+    _context.strokeStyle = STROKE_COLOR;
     drawFunction();
     _context.stroke();
 
     _context.beginPath();
+    _context.strokeStyle = STROKE_COLOR_CIRCLE;
     drawCircle();
     _context.stroke();
 
     // Updates time
     _time.seconds += 0.007;
-    _time.t = _time.seconds * Math.PI;
+    _time.t = _time.seconds * 2.54;
 
     // Calls himself to redraw the canvas every 35 miliseconds which makes the
     // function move at about 28fps
@@ -81,20 +91,20 @@ App.Models.BreathingCanvas = function() {
   var drawFunction = function() {
     // Goes from the yAxis to the right side of the canvas plotting the
     // function.
-    // Uses UNITS to scale up the function.
+    // Uses _scale to scale up the function.
     // The plotting occurs every four pixels, which offers more or less the
     // same quality as using one. More than four pixels shows shuttering
     // corners
     for (var i = 0; i <= _width; i += 4) {
-      _context.lineTo(i, -UNITS*_function.evaluate((i - _yAxis)/UNITS, _time.t) + _xAxis);
+      _context.lineTo(i, -_scale*_function.evaluate((i - _yAxis)/_scale, _time.t) + _xAxis);
     }
   };
 
   var drawCircle = function() {
     var xCenter = _width/2,
-        yCenter = -UNITS*_function.evaluate(0, _time.t) + _xAxis;
+        yCenter = -_scale*_function.evaluate(0, _time.t) + _xAxis;
 
-    _context.arc(xCenter, yCenter, 10, 0, 2*Math.PI, false);
+    _context.arc(xCenter, yCenter, CIRCLE_RADIUS, 0, 2*Math.PI, false);
   };
 
   this.initialize.apply(this, arguments);

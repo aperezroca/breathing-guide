@@ -1,29 +1,68 @@
-body {
-  background: #fafafa;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  color: #333;
-}
+#breathing-guide {
+  width: 100%;
+  text-align: center;
+  font-family: sans-serif; }
+  #breathing-guide canvas {
+    width: 100%;
+    height: 300px; }
+  #breathing-guide .slider-container {
+    display: inline-block;
+    width: 200px;
+    margin: 10px 20px; }
+    #breathing-guide .slider-container input, #breathing-guide .slider-container label {
+      display: inline-block; }
+    #breathing-guide .slider-container label {
+      width: 44px;
+      text-align: right; }
 
-.hero-unit {
-  margin: 50px auto 0 auto;
-  width: 300px;
-  font-size: 18px;
-  font-weight: 200;
-  line-height: 30px;
-  background-color: #eee;
-  border-radius: 6px;
-  padding: 60px;
-}
-
-.hero-unit h1 {
-  font-size: 60px;
-  line-height: 1;
-  letter-spacing: -1px;
-}
-
-.browsehappy {
-  margin: 0.2em 0;
-  background: #ccc;
-  color: #000;
-  padding: 0.2em 0;
-}
+input[type=range] {
+  -webkit-appearance: none;
+  vertical-align: middle;
+  margin: 0 0 0 0;
+  padding: 0 4px;
+  position: relative;
+  vertical-align: middle;
+  overflow-x: hidden;
+  overflow-y: visible;
+  height: 32px; }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none !important;
+    position: relative;
+    pointer-events: none;
+    width: 20px;
+    height: 20px;
+    margin-top: -8px; }
+  input[type=range]::-webkit-slider-runnable-track {
+    background: #757575;
+    height: 2px; }
+  input[type=range]::-webkit-slider-thumb:before {
+    content: '';
+    font-style: 0;
+    line-height: 0;
+    position: absolute;
+    left: -3000px;
+    right: 0;
+    top: 8px;
+    bottom: 0;
+    background: #00B4FF;
+    border-radius: 4px;
+    height: 2px; }
+  input[type=range]::-webkit-slider-thumb:after {
+    content: '';
+    position: absolute;
+    left: -4px;
+    right: -4px;
+    top: -4px;
+    bottom: -4px;
+    background: #EEE;
+    border-radius: 50%;
+    border: 1px solid #AAA;
+    z-index: 10; }
+  input[type=range]:focus {
+    outline: none; }
+  input[type=range]:hover::-webkit-slider-thumb:after {
+    background: #E5E5E5; }
+  input[type=range]:disabled::-webkit-slider-thumb:before {
+    background-color: #a1151a; }
+  input[type=range]:disabled::-webkit-slider-thumb:after {
+    background: #adadad !important; }
